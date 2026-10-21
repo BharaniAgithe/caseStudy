@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -7,9 +8,9 @@ pipeline {
     }
 
     environment {
-        // Replace with your Docker Hub repository, e.g. mydockerid/student-internship-tracker
-        IMAGE_NAME = 'YOUR_DOCKERHUB_USERNAME/student-internship-tracker'
+        IMAGE_NAME = 'bharaniagithe/student-internship-tracker'
         K8S_NAMESPACE = 'default'
+        PYTHON = 'C:\\Users\\Gift a Smile\\AppData\\Local\\Programs\\Python\\Python313\\python.exe'
     }
 
     stages {
@@ -21,9 +22,9 @@ pipeline {
 
         stage('Test Flask application') {
             steps {
-                bat 'py -m pip install --upgrade pip'
-                bat 'py -m pip install -r requirements.txt'
-                bat 'py -m pytest -q'
+                bat '"%PYTHON%" -m pip install --upgrade pip'
+                bat '"%PYTHON%" -m pip install -r requirements.txt'
+                bat '"%PYTHON%" -m pytest -q'
             }
         }
 
@@ -49,12 +50,14 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                // Jenkins agent must be able to run kubectl and access Docker Desktop's cluster.
                 bat 'kubectl config current-context'
                 bat 'kubectl apply -f k8s\\deployment.yaml'
                 bat 'kubectl apply -f k8s\\service.yaml'
-                bat 'kubectl set image deployment/student-internship-tracker app=%IMAGE_NAME%:%BUILD_NUMBER% -n %K8S_NAMESPACE%'
+
+                bat 'kubectl set image deployment/student-internship-tracker student-internship-tracker=%IMAGE_NAME%:%BUILD_NUMBER% -n %K8S_NAMESPACE%'
+
                 bat 'kubectl rollout status deployment/student-internship-tracker --timeout=180s -n %K8S_NAMESPACE%'
+
                 bat 'kubectl get pods -l app=student-internship-tracker -n %K8S_NAMESPACE%'
             }
         }
