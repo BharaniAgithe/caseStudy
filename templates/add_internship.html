@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Add Internship · Internship Tracker{% endblock %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">NEW OPPORTUNITY</p><h1>Add an internship</h1><p class="muted">Save the details so you can follow your progress.</p></div>
+<form class="panel form-panel" method="post">
+  <div class="form-grid">
+    <label>Company name *<input name="company" required maxlength="120" value="{{ form.get('company','') }}" placeholder="e.g. Example Technologies"></label>
+    <label>Internship role *<input name="role" required maxlength="120" value="{{ form.get('role','') }}" placeholder="e.g. Python Developer Intern"></label>
+    <label>Location<input name="location" maxlength="120" value="{{ form.get('location','') }}" placeholder="e.g. Hyderabad / Remote"></label>
+    <label>Application date<input type="date" name="applied_date" value="{{ form.get('applied_date','') }}"></label>
+    <label>Status<select name="status">{% for status in ['Applied','Interview','Selected','Rejected','Withdrawn'] %}<option {% if form.get('status','Applied') == status %}selected{% endif %}>{{ status }}</option>{% endfor %}</select></label>
+    <label class="full">Notes<textarea name="notes" rows="4" maxlength="1000" placeholder="Recruiter details, next steps, or reminders">{{ form.get('notes','') }}</textarea></label>
+  </div>
+  <div class="actions"><button class="button" type="submit">Save application</button><a class="button secondary" href="{{ url_for('applications') }}">Cancel</a></div>
+  <p class="hint">Fields marked * are required.</p>
+</form>
+{% endblock %}

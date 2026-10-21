@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Applications · Internship Tracker{% endblock %}
+{% block content %}
+<div class="page-heading row-heading"><div><p class="eyebrow">YOUR OPPORTUNITIES</p><h1>Applications</h1><p class="muted">Search and review your internship pipeline.</p></div><a class="button" href="{{ url_for('add_internship') }}">＋ Add internship</a></div>
+<form class="search" method="get"><input name="q" value="{{ q }}" placeholder="Search company, role, or location"><button class="button" type="submit">Search</button>{% if q %}<a href="{{ url_for('applications') }}">Clear</a>{% endif %}</form>
+<section class="panel">
+{% if applications %}
+<div class="table-wrap"><table>
+<thead><tr><th>Company / Location</th><th>Role</th><th>Applied</th><th>Status</th><th>Notes</th><th>Action</th></tr></thead>
+<tbody>{% for item in applications %}
+<tr><td><strong>{{ item.company }}</strong><small>{{ item.location or 'Location not specified' }}</small></td><td>{{ item.role }}</td><td>{{ item.applied_date }}</td><td><span class="status {{ item.status|lower }}">{{ item.status }}</span></td><td class="notes">{{ item.notes or '—' }}</td><td><form method="post" action="{{ url_for('delete_internship', internship_id=item.id) }}" onsubmit="return confirm('Delete this application?')"><button class="link-button danger" type="submit">Delete</button></form></td></tr>
+{% endfor %}</tbody></table></div>
+{% else %}
+<div class="empty"><div class="empty-icon">🔎</div><h3>No matching applications</h3><p>{% if q %}Try a different search term.{% else %}Add an internship application to see it here.{% endif %}</p><a href="{{ url_for('add_internship') }}">Add internship</a></div>
+{% endif %}
+</section>
+{% endblock %}

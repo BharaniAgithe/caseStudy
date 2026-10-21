@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · Internship Tracker{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">STUDENT CAREER TOOL</p>
+    <h1>Keep your internship journey organized.</h1>
+    <p class="muted">Track applications, interviews, and outcomes in one place.</p>
+    <a class="button" href="{{ url_for('add_internship') }}">＋ Add an application</a>
+  </div>
+  <div class="hero-icon">🚀</div>
+</section>
+<section class="stats">
+  <article class="stat"><span>Total applications</span><strong>{{ total }}</strong></article>
+  <article class="stat"><span>Applied</span><strong>{{ applied }}</strong></article>
+  <article class="stat"><span>Interviews</span><strong>{{ interviews }}</strong></article>
+  <article class="stat"><span>Selected</span><strong>{{ selected }}</strong></article>
+</section>
+<section class="panel">
+  <div class="panel-heading"><h2>Recent applications</h2><a href="{{ url_for('applications') }}">View all →</a></div>
+  {% if recent %}
+  <div class="table-wrap"><table>
+    <thead><tr><th>Company</th><th>Role</th><th>Applied on</th><th>Status</th></tr></thead>
+    <tbody>{% for item in recent %}
+      <tr><td>{{ item.company }}</td><td>{{ item.role }}</td><td>{{ item.applied_date }}</td>
+      <td><span class="status {{ item.status|lower }}">{{ item.status }}</span></td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+  {% else %}
+    <div class="empty"><div class="empty-icon">🗂️</div><h3>No applications yet</h3><p>Add your first internship to get started.</p><a href="{{ url_for('add_internship') }}">Add internship</a></div>
+  {% endif %}
+</section>
+{% endblock %}
