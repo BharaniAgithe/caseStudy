@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: YOUR_DOCKERHUB_USERNAME/student-internship-tracker:latest
+          image: bharaniagithe/student-internship-tracker:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
