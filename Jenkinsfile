@@ -1,4 +1,4 @@
-
+```groovy
 pipeline {
     agent any
 
@@ -14,6 +14,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -59,13 +60,12 @@ pipeline {
 
                 bat 'kubectl get service student-internship-tracker -n %K8S_NAMESPACE%'
 
-                bat 'kubectl set image deployment/student-internship-tracker student-internship-tracker=%IMAGE_NAME%:%BUILD_NUMBER% -n %K8S_NAMESPACE%'
+                // Correct Kubernetes container name: app
+                bat 'kubectl set image deployment/student-internship-tracker app=%IMAGE_NAME%:%BUILD_NUMBER% -n %K8S_NAMESPACE%'
 
                 bat 'kubectl rollout status deployment/student-internship-tracker --timeout=180s -n %K8S_NAMESPACE%'
 
                 bat 'kubectl get pods -l app=student-internship-tracker -n %K8S_NAMESPACE%'
-
-                bat 'kubectl get services -n %K8S_NAMESPACE%'
             }
         }
     }
@@ -84,3 +84,4 @@ pipeline {
         }
     }
 }
+```
